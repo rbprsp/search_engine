@@ -1,0 +1,11 @@
+### IDE folders
+.vscode/
+.vs/
+.ide/
+
+### Cmake build-files folder
+build/
+
+### Binary folder
+bin/
+
