@@ -26,10 +26,8 @@ void Utils::PrintLogsLink()
         std::string link = std::filesystem::canonical(exe_path).parent_path().string() + "/logs/";
         callPrinter(link);
     #elif defined(__linux__)
-        char buffer[PATH_MAX];
-        ssize_t count = readlink("/proc/self/exe", buffer, PATH_MAX);
-        std::filesystem::path exe_path = std::string(buffer, (count > 0) ? count : 0);
-        std::string link = std::filesystem::canonical(exe_path).parent_path().string() + "/logs/";
+        std::filesystem::path exe_path = std::filesystem::read_symlink("/proc/self/exe");
+        std::string link = exe_path.parent_path().string() + "/logs/";
         callPrinter(link);
     #elif defined(__APPLE__)
         char buffer[PATH_MAX];
