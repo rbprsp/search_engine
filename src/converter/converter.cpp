@@ -85,11 +85,7 @@ bool ConverterJSON::readAllDocs()
                 }
                 else
                 {
-                    std::string line = {}, content = {};
-                    while(std::getline(file, line))
-                        content += line + "\n";
-
-                    this->docs.push_back(content);
+                    this->docs.push_back(doc.string());
                     file_counter++;
                     file.close();
                 }
