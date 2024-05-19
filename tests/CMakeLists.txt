@@ -1,8 +1,8 @@
 cmake_minimum_required(VERSION 3.5)
 
-set(NAME "${PROJECT_NAME}_tests")
+set(PROJECT_NAME_TESTS "${PROJECT_NAME}_tests")
 
-project(${NAME}
+project(${PROJECT_NAME_TESTS}
     LANGUAGES CXX
     VERSION 1.0.0
 )
@@ -10,14 +10,16 @@ project(${NAME}
 enable_testing()
 set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 
-add_executable(${NAME}
-    TEST_converter.cpp
+include_directories("${SEARCH_ENGINE_LIST_DIR}/src/index")
+
+add_executable(${PROJECT_NAME_TESTS}
+    ${SEARCH_ENGINE_LIST_DIR}/src/index/index.cpp
+    TEST_InvertedIndex.cpp
 )
 
-target_link_libraries(${NAME} PUBLIC gtest_main)
-
+target_link_libraries(${PROJECT_NAME_TESTS} PUBLIC gtest_main)
 
 add_test(
-    NAME ConverterTest
-    COMMAND ${NAME}
+    NAME TestBasic
+    COMMAND ${PROJECT_NAME_TESTS}
 )
