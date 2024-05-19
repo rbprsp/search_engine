@@ -1,24 +1,30 @@
+//STL
 #include <iostream>
+#include <memory>
 
-#include "parser/parser.h"
+//se classes
 #include "converter/converter.h"
+#include "utils/utils.h"
 
 int main(int argc, char* argv[])
 {
-    Parser* parser = new Parser();
 
-    if(!parser->getParserState())
+    std::unique_ptr<ConverterJSON> converter;
+    
+    try
     {
-        delete parser;
+        std::make_unique<ConverterJSON>();
+    }
+    catch(const std::exception& e)
+    {
+        std::cerr << e.what() << std::endl;
+        Utils::PrintLogsLink();
+        std::cin.get();
         return 1;
     }
-        
-    ConverterJSON* converter = new ConverterJSON;
-
-    converter->GetTextFromDocs();
-
-    delete parser;
-    std::cin.get();
     
+    int resp = converter->GetResponsesLimit();
+
+    std::cin.get();
     return 0;
 }
