@@ -3,6 +3,10 @@ cmake_minimum_required(VERSION 3.5)
 cmake_path(GET CMAKE_CURRENT_SOURCE_DIR FILENAME PROJECT_NAME)
 string(REPLACE " " "_" PROJECT_ID ${PROJECT_NAME})
 
+### ----------------
+### Search Engine
+### ----------------
+
 set(CMAKE_CXX_STANDARD 17)
 
 project(${PROJECT_NAME}
@@ -18,23 +22,23 @@ include_directories("${CMAKE_CURRENT_LIST_DIR}/deps/googletest/include")
 #local
 include_directories("${CMAKE_CURRENT_LIST_DIR}/src/logger")
 include_directories("${CMAKE_CURRENT_LIST_DIR}/src/converter")
+include_directories("${CMAKE_CURRENT_LIST_DIR}/src/index")
 
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/bin)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/bin)
-set(SEARCH_ENGINE_LIST_DIR ${CMAKE_CURRENT_LIST_DIR})
-
 
 add_executable(${PROJECT_NAME} 
         src/main.cpp
         src/converter/converter.cpp
+        src/index/index.cpp
         src/utils/utils.cpp
 )
 
-set(FTXUI_QUIET ON) #removig ftxui from cmake output
+set(FTXUI_QUIET ON)
 
 add_subdirectory("${CMAKE_CURRENT_LIST_DIR}/deps/googletest")
 add_subdirectory("${CMAKE_CURRENT_LIST_DIR}/deps/FTXUI")
-add_subdirectory("${CMAKE_CURRENT_LIST_DIR}/tests")
+
 
 target_link_libraries(${PROJECT_NAME} 
                         PRIVATE ftxui::screen
@@ -42,3 +46,22 @@ target_link_libraries(${PROJECT_NAME}
                         PRIVATE ftxui::component
 )
 
+### ----------------
+### Testing
+### ----------------
+
+enable_testing()
+
+set(TESING_PROJECT_NAME "${PROJECT_NAME}_tests")
+
+add_executable(${TESING_PROJECT_NAME}
+        tests/TEST_InvertedIndex.cpp
+        src/index/index.cpp
+)
+
+target_link_libraries(${TESING_PROJECT_NAME} gtest_main)
+
+add_test(
+        NAME TestBasic
+        COMMAND ${TESING_PROJECT_NAME}
+)
