@@ -5,7 +5,7 @@
 #elif defined(__linux__)
     #include <unistd.h>
 #elif defined(__APPLE__)
-    #include <mach-o/dyld.h>
+    #include <dlfcn.h>
 #else
     #error "Unsupported platform"
 #endif
@@ -30,15 +30,11 @@ void Utils::PrintLogsLink()
         std::string link = exe_path.parent_path().string() + "/logs/";
         callPrinter(link);
     #elif defined(__APPLE__)
-        char buffer[PATH_MAX];
-        uint32_t size = sizeof(buffer);
-        if (_NSGetExecutablePath(buffer, &size) == 0) 
-        {
-            std::string link = std::filesystem::canonical(exe_path).parent_path().string() + "/logs/";
-            callPrinter(link);
-        } 
-        else 
-            return "./logs/";
+        Dl_info info;
+        std::string link = "";
+        if (dladdr(reinterpret_cast<void*>(get_executable_path), &info))
+            link = std::filesystem::path(info.dli_fname).parent_path().string() + "/logs/";
+        callPrinter(link);
     #else
         #error "Unsupported platform"
     #endif
