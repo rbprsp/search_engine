@@ -9,6 +9,8 @@ string(REPLACE " " "_" PROJECT_ID ${PROJECT_NAME})
 
 set(CMAKE_CXX_STANDARD 17)
 
+option(FTXUI_QUIET "Set to ON for FTXUI to be quiet" ON)
+
 project(${PROJECT_NAME}
         VERSION 1.0.0
         LANGUAGES CXX
@@ -34,10 +36,9 @@ add_executable(${PROJECT_NAME}
         src/utils/utils.cpp
 )
 
-set(FTXUI_QUIET ON)
-
 add_subdirectory("${CMAKE_CURRENT_LIST_DIR}/deps/googletest")
 add_subdirectory("${CMAKE_CURRENT_LIST_DIR}/deps/FTXUI")
+
 
 
 target_link_libraries(${PROJECT_NAME} 
