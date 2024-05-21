@@ -62,6 +62,9 @@ bool ConverterJSON::readAllDocs()
     json j;
     std::ifstream file(this->config_file_name);
 
+    file >> j;
+    file.close();
+
     namespace fs = std::filesystem;
     if(!j["files"].empty())
     {
@@ -116,11 +119,11 @@ bool ConverterJSON::readResponLimit()
     file >> j;
     file.close();
 
-    if(!j["max_responses"].empty())
+    if(!j["config"]["max_responses"].empty())
     {
         try
         {
-            this->max_responses = j["max_responses"].get<int>();
+            this->max_responses = j["config"]["max_responses"].get<int>();
             logger->info("max_responses value parsed successfully.");
             return true;
         }
@@ -136,6 +139,38 @@ bool ConverterJSON::readResponLimit()
 
 bool ConverterJSON::readRequests()
 {
+    json j;
+    std::ifstream file(this->requests_file_name);
+
+    if(!file.is_open())
+    {
+        logger->critical("Unable to open %s file.", this->requests_file_name);
+        return false;
+    }
+
+    try
+    {
+        file >> j;
+        file.close();
+    }
+    catch(const std::exception& e)
+    {
+        logger->critical("Invalid .json format. Error {}.", e.what());
+        return false;   
+    }
+
+    if(!j["requests"].empty())
+    {
+        for(auto& words : requests)
+            this->requests.push_back(words);
+    }
+    else
+    {
+        logger->error("No valid requests.");
+        return false;
+    }
+
+    logger->info("Requests parsed successfully.");
     return true;
 }
 
@@ -151,10 +186,10 @@ int ConverterJSON::GetResponsesLimit()
 
 std::vector<std::string> ConverterJSON::GetRequests()
 {
-    std::vector<std::string> vs;
-    return vs;
+    return this->requests;
 }
 
+//todo
 void ConverterJSON::PutAnswers(std::vector<std::vector<std::pair<int, float>>>answers)
 {
 
