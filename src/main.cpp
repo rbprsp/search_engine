@@ -3,8 +3,8 @@
 #include <memory>
 
 //se classes
-#include "converter/converter.h"
-#include "index/index.h"
+#include "converter.h"
+#include "inverted.h"
 #include "utils/utils.h"
 
 int main(int argc, char* argv[])

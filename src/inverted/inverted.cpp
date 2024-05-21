@@ -1,5 +1,5 @@
 //class header
-#include "index.h"
+#include "inverted.h"
 
 //STL
 #include <fstream>

@@ -1,5 +1,5 @@
-#ifndef __INDEX_H__
-#define __INDEX_H__
+#ifndef __INVERTED_H__
+#define __INVERTED_H__
 
 #include <iostream>
 #include <vector>

@@ -25,7 +25,7 @@ include_directories("${CMAKE_CURRENT_LIST_DIR}/deps/googletest/include")
 #local
 include_directories("${CMAKE_CURRENT_LIST_DIR}/src/logger")
 include_directories("${CMAKE_CURRENT_LIST_DIR}/src/converter")
-include_directories("${CMAKE_CURRENT_LIST_DIR}/src/index")
+include_directories("${CMAKE_CURRENT_LIST_DIR}/src/inverted")
 
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/bin)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/bin)
@@ -34,7 +34,7 @@ message(STATUS "Adding main executable: ${PROJECT_NAME}")
 add_executable(${PROJECT_NAME} 
         src/main.cpp
         src/converter/converter.cpp
-        src/index/index.cpp
+        src/inverted/inverted.cpp
         src/utils/utils.cpp
 )
 
@@ -60,7 +60,7 @@ set(TESING_PROJECT_NAME "${PROJECT_NAME}_tests")
 message(STATUS "Adding test executable: ${TESING_PROJECT_NAME}")
 add_executable(${TESING_PROJECT_NAME}
         tests/TEST_InvertedIndex.cpp
-        src/index/index.cpp
+        src/inverted/inverted.cpp
 )
 
 target_link_libraries(${TESING_PROJECT_NAME} gtest_main)

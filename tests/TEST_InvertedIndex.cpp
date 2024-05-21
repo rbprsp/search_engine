@@ -5,7 +5,7 @@
 #include <gtest/gtest.h>
 
 //TEST Classes
-#include <index.h>
+#include <inverted.h>
 
 void TestInvertedIndexFunctionality(const std::vector<std::string>& docs, const std::vector<std::string>& requests, const std::vector<std::vector<Entry>>& expected) 
 {
