@@ -7,8 +7,8 @@
 
 struct Entry
 {
-    size_t count;
     size_t doc_id;
+    size_t count;
 
     bool operator ==(const Entry& other) const;
 };
@@ -21,12 +21,12 @@ private:
     std::map<std::string, std::vector<Entry>> freq_dictionary;
 
     int CountWordEntry(std::string& text, std::string word);
-    bool case_sensetive = false;
+    //bool is_case_sensitive = false;
 
 public:
     InvertedIndex() = default;
 
-    void EngineCaseSensetive(bool case_sensetive);
+    //void EngineCaseSensitive(bool case_sensitive);
     void UpdateDocsBase(std::vector<std::string> input_docs);
     std::vector<Entry> GetWordCount(const std::string& word);
 };

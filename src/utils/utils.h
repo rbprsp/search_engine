@@ -12,5 +12,4 @@ private:
     static void callPrinter(std::string link);
 };
 
-
 #endif

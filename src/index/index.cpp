@@ -6,6 +6,8 @@
 #include <regex>
 #include <algorithm>
 #include <string>
+#include <thread>
+#include <mutex>
 
 //Entry operator overload
 bool Entry::operator==(const Entry& other) const
@@ -15,7 +17,6 @@ bool Entry::operator==(const Entry& other) const
 
 void InvertedIndex::UpdateDocsBase(std::vector<std::string> input_docs)
 {
-    this->docs.erase(this->docs.begin(), this->docs.end());
     for(auto& doc : input_docs)
     {
         std::ifstream file(doc);
@@ -28,29 +29,52 @@ void InvertedIndex::UpdateDocsBase(std::vector<std::string> input_docs)
             file.close();
         }
         else
-            continue;
+        {
+            this->docs.push_back(doc);
+        }
     }
 }
 
 std::vector<Entry> InvertedIndex::GetWordCount(const std::string& word)
 {
     std::vector<Entry> result;
-    for(int i = 0; i < this->docs.size(); i++)
-    {
-        Entry e;
-        e.count = this->CountWordEntry(docs.at(i), word);
-        e.doc_id = i;
+    std::vector<std::thread> threads;
+    std::mutex result_mutex;
 
-        result.push_back(e);
+    auto check_document = [this, &result, &word, &result_mutex](int i)
+    {
+        int word_count = this->CountWordEntry(this->docs.at(i), word);
+        if(word_count != 0)
+        {
+            Entry e{};
+            e.doc_id = i;
+            e.count = word_count;
+            std::lock_guard<std::mutex> lock(result_mutex);
+            result.push_back(e);
+        }
+    };
+
+    // run threads
+    int docs_size = this->docs.size(); // get docs size | not calling .size() on every loop cycle
+
+    for(int i = 0; i < docs_size; ++i)
+        threads.emplace_back(check_document, i);
+
+    // wait for threads
+    for(auto& thread : threads)
+    {
+        if(thread.joinable())
+            thread.join();
     }
 
     return result;
 }
 
+
 int InvertedIndex::CountWordEntry(std::string& text, std::string word)
 {
     std::string lower_text = "", lower_word = "";
-    if(!case_sensetive)
+    if(true)
     {
         lower_text = text;
         lower_word = word;
@@ -65,8 +89,8 @@ int InvertedIndex::CountWordEntry(std::string& text, std::string word)
 
     return std::distance(words_begin, words_end);
 }
-
-void InvertedIndex::EngineCaseSensetive(bool case_sensetive)
-{
-    this->case_sensetive = case_sensetive;
-}
+//todo
+// void InvertedIndex::EngineCaseSensitive(bool case_sensitive)
+// {
+//     this->case_sensetive = case_sensetive;
+// }
