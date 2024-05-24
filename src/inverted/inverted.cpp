@@ -17,6 +17,8 @@ bool Entry::operator==(const Entry& other) const
 
 void InvertedIndex::UpdateDocsBase(std::vector<std::string> input_docs)
 {
+    if(docs.size() != 0)
+        docs.erase(docs.begin(), docs.end());
     for(auto& doc : input_docs)
     {
         std::ifstream file(doc);
@@ -30,7 +32,8 @@ void InvertedIndex::UpdateDocsBase(std::vector<std::string> input_docs)
         }
         else
         {
-            this->docs.push_back(doc);
+            if(doc.size() != 0 )
+                this->docs.push_back(doc);
         }
     }
 }
@@ -51,6 +54,7 @@ std::vector<Entry> InvertedIndex::GetWordCount(const std::string& word)
             e.count = word_count;
             std::lock_guard<std::mutex> lock(result_mutex);
             result.push_back(e);
+            freq_dictionary.insert_or_assign(word, result);
         }
     };
 

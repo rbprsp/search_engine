@@ -1,6 +1,7 @@
 #include <json.hpp>
 #include <fstream>
 #include <filesystem>
+#include <iomanip>
 
 #include "converter.h"
 
@@ -189,8 +190,39 @@ std::vector<std::string> ConverterJSON::GetRequests()
     return this->requests;
 }
 
-//todo
+std::string CreateRequestId(int i)
+{
+    std::ostringstream oss;
+    oss << "request" <<std::setw(3) << std::setfill('0') << i;
+    return oss.str();
+}
+
 void ConverterJSON::PutAnswers(std::vector<std::vector<std::pair<int, float>>>answers)
 {
+    nlohmann::ordered_json j;
+    std::ofstream file(this->answers_file_name);
 
+    size_t answers_size = answers.size();
+    for(int i = 0; i < answers_size; i++)
+    {
+        std::string request_id = CreateRequestId(i);
+        nlohmann::ordered_json req;
+        if(freq_dictionary.find(requests[i]) != freq_dictionary.end())
+        {
+            req[request_id]["result"] = "true";
+            for(int j = 0; j < answers[i].size(); j++)
+            {
+                nlohmann::ordered_json relevance;
+                relevance["docid"] = answers[i][j].first, relevance["rank"] = answers[i][j].second;
+                req[request_id]["relevance"].push_back(relevance);
+            }
+        }
+        else
+            req[request_id]["result"] = "false";
+
+        j["answers"].push_back(req);
+    }
+
+    file << std::setw(4) << j;
+    logger->info("answers.json created successfully.");
 }
