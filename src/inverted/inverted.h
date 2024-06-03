@@ -19,12 +19,13 @@ class InvertedIndex
 private:
     std::vector<std::string> docs;
     int CountWordEntry(std::string& text, std::string word);
-    //bool is_case_sensitive = false;
+    bool case_sensitive = false;
 
 public:
     InvertedIndex() = default;
 
-    //void EngineCaseSensitive(bool case_sensitive);
+    void EnableCaseSensitive();
+    void DisableCaseSensitive();
     void UpdateDocsBase(std::vector<std::string> input_docs);
     std::vector<Entry> GetWordCount(const std::string& word);
     std::map<std::string, std::vector<Entry>> freq_dictionary;

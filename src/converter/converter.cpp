@@ -2,6 +2,7 @@
 #include <fstream>
 #include <filesystem>
 #include <iomanip>
+#include <sstream>
 
 #include "converter.h"
 

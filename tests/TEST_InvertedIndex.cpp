@@ -31,7 +31,8 @@ TEST(TestCaseInvetedIndex, TestBasic)
     const std::vector<std::string> requests = {"london", "the"};
     const std::vector<std::vector<Entry>> expected = //
     {
-        {{0, 1}}, {{0, 1}, {1, 3}}
+        {{0, 1}},
+        {{0, 1}, {1, 3}}
     };
 
     TestInvertedIndexFunctionality(docs, requests, expected);
