@@ -61,6 +61,8 @@ std::vector<Entry> InvertedIndex::GetWordCount(const std::string& word)
             temp_results[i] = e;
             }
         }
+        else
+            temp_results[i] = {};
     };
 
     // run threads
@@ -89,12 +91,11 @@ std::vector<Entry> InvertedIndex::GetWordCount(const std::string& word)
     return result;
 }
 
-
 int InvertedIndex::CountWordEntry(std::string& text, std::string word)
 {
     std::string lower_text = text, lower_word = word;
     std::vector<std::thread> threads;
-    std::atomic_int result(0);
+    //std::atomic_int result(0);
     
     if(this->case_sensitive)
     {
@@ -102,31 +103,11 @@ int InvertedIndex::CountWordEntry(std::string& text, std::string word)
         std::transform(lower_word.begin(), lower_word.end(), lower_word.begin(), ::tolower);
     }
 
-    std::istringstream iss(word);
-    std::vector<std::string> words;
-    std::string temp;
+    std::regex word_regex("\\b" + lower_word + "\\b");
+    auto words_begin = std::sregex_iterator(lower_text.begin(), lower_text.end(), word_regex);
+    auto words_end = std::sregex_iterator();
 
-    while (iss >> temp)
-        words.push_back(temp);
-
-    auto words_cout = words.size();
-
-    auto entries = [&lower_text, &result](const std::string _w)
-    {
-        std::regex word_regex("\\b" + _w + "\\b");
-        auto words_begin = std::sregex_iterator(lower_text.begin(), lower_text.end(), word_regex);
-        auto words_end = std::sregex_iterator();
-
-        result += std::distance(words_begin, words_end);
-    };
-
-    for(const auto& w : words)
-        threads.emplace_back(entries, w);
-
-    for(auto &thread : threads)
-        thread.join();
-
-    return result.load();
+    return std::distance(words_begin, words_end);
 }
 
 void InvertedIndex::EnableCaseSensitive()  {    this->case_sensitive = true;    }
