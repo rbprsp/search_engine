@@ -10,6 +10,12 @@ bool RelativeIndex::operator==(const RelativeIndex& other) const
     return (doc_id == other.doc_id && rank == other.rank);
 }
 
+void SearchServer::setMaxResponses(int max_responses)
+{
+    if(max_responses > 0 && max_responses < 1000)
+        this->_max_responses = max_responses;
+}
+
 std::vector<std::vector<RelativeIndex>> SearchServer::search(const std::vector<std::string>& queries_input) 
 {
     std::vector<std::vector<RelativeIndex>> results;
@@ -51,8 +57,8 @@ std::vector<std::vector<RelativeIndex>> SearchServer::search(const std::vector<s
                 return a.doc_id < b.doc_id;
         });
 
-        if (query_results.size() > 5)
-            query_results.resize(5); 
+        if (query_results.size() > this->_max_responses)
+            query_results.resize(this->_max_responses); 
 
         results.push_back(query_results);
     }
