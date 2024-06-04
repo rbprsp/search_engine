@@ -44,7 +44,7 @@ public:
 
     std::vector<std::string> GetRequests();
 
-    void PutAnswers(std::vector<std::vector<std::pair<int, float>>>answers);
+    void PutAnswers(std::vector<std::vector<std::pair<int, float>>> answers);
 };
 
 #endif
