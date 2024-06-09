@@ -10,11 +10,28 @@
 int main(int argc, char* argv[])
 {
     ConverterJSON cj;
+    if(argc > 1)
+    {
+        if(std::strcmp(argv[1], "--config") == 0)
+        {
+            cj.GenerateConfig();
+            std::cout << "Config file was created successfully." << std::endl;
+            return 0;
+        }
+    }
+
+    if(!cj.ValidateConfig())
+    {
+        std::cout << "ERROR: check logs folder. \"logs/logs.txt\"" << std::endl;
+        return false;
+    }
+
     InvertedIndex ii;
     std::vector<std::string> qs = cj.GetRequests();
     ii.UpdateDocsBase(cj.GetTextFromDocs());
     
     SearchServer ss(ii);
+    ss.setMaxResponses(cj.GetResponsesLimit());
     cj.PutAnswers(ss.search(qs));
 
     return 0;

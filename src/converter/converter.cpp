@@ -8,31 +8,28 @@
 
 using nlohmann::json;
 
-ConverterJSON::ConverterJSON()
+void ConverterJSON::GenerateConfig()
 {
-    //TODO:
+    nlohmann::ordered_json j;
+    std::ofstream file(this->config_file_name);
+
+    j["config"]["name"] = this->searhc_engine_name;
+    j["config"]["version"] = this->search_engine_version;
+    j["config"]["max_responses"] = this->max_responses; 
+
+    j["files"].push_back("your files here");
+
+    file << std::setw(4) << j;
+}
+
+bool ConverterJSON::ValidateConfig()
+{
+
     this->file_sink = std::make_shared<spdlog::sinks::basic_file_sink_mt>("logs/logs.txt", true);
     this->logger = std::make_shared<spdlog::logger>("ConverterJSON", this->file_sink);
 
     spdlog::set_default_logger(this->logger);
 
-    if(this->validateConfig())
-    {
-        if(!this->readAllDocs() || !this->readRequests() || !this->readResponLimit())
-        {
-            logger->critical("Error while parsing .json file."); 
-            throw std::runtime_error("Unable to read configuration file.");
-        }
-    }
-    else
-    {
-       logger->critical("Can't find config path | Can't validate .json format in config file."); 
-       throw std::runtime_error("Unable to read configuration file.");
-    }
-}
-
-bool ConverterJSON::validateConfig()
-{
     json j;
     std::ifstream file(this->config_file_name);
 
@@ -49,6 +46,11 @@ bool ConverterJSON::validateConfig()
         file >> j;
         file.close();
         logger->info("Config file read successfully.");
+        if(!this->readAllDocs() || !this->readRequests() || !this->readResponLimit())
+        {
+            logger->critical("Error while parsing .json file."); 
+            return false;
+        }
     }
     catch(const std::exception& e)
     {

@@ -19,25 +19,27 @@ private:
     const std::string config_file_name = "config.json";
     const std::string requests_file_name = "requests.json";
     const std::string answers_file_name = "answers.json";
+    const std::string search_engine_version = "1.0.0";
+    const std::string searhc_engine_name = "search_engine";
 
     //data from files
     std::vector<std::string> docs;
     std::vector<std::string> requests;
     std::map<std::string, std::vector<Entry>> freq_dictionary;
-    int max_responses = 0;
+    int max_responses = 5;
 
     //logger
     std::shared_ptr<spdlog::sinks::basic_file_sink_mt> file_sink;
     std::shared_ptr<spdlog::logger> logger;
 
-    bool validateConfig();
+    
 
     bool readAllDocs();
     bool readResponLimit();
     bool readRequests();
 
 public:
-    ConverterJSON();
+    ConverterJSON() = default;
 
     std::vector<std::string> GetTextFromDocs();
 
@@ -46,6 +48,10 @@ public:
     std::vector<std::string> GetRequests();
 
     void PutAnswers(std::vector<std::vector<RelativeIndex>> answers);
+
+    void GenerateConfig();
+
+    bool ValidateConfig();
 };
 
 #endif
