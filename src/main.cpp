@@ -9,7 +9,6 @@
 
 int main(int argc, char* argv[])
 {
-    //todo
     ConverterJSON cj;
     InvertedIndex ii;
     std::vector<std::string> qs = cj.GetRequests();
