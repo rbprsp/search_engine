@@ -10,6 +10,8 @@ This project using
 * [spdlog](https://github.com/gabime/spdlog)
 * [gtest](https://github.com/google/googletest)
 
+---
+
 ### Building
 
 1. Clone this repository using `git`
@@ -32,6 +34,8 @@ cmake -B build
 ```bash
 cmake --build build --config Release
 ```
+
+---
 
 ### Using
 
