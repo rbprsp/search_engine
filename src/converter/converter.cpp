@@ -11,14 +11,11 @@ using nlohmann::json;
 ConverterJSON::ConverterJSON()
 {
     //TODO:
-
-    
     this->file_sink = std::make_shared<spdlog::sinks::basic_file_sink_mt>("logs/logs.txt", true);
     this->logger = std::make_shared<spdlog::logger>("ConverterJSON", this->file_sink);
 
     spdlog::set_default_logger(this->logger);
-    
-    /*
+
     if(this->validateConfig())
     {
         if(!this->readAllDocs() || !this->readRequests() || !this->readResponLimit())
@@ -32,7 +29,6 @@ ConverterJSON::ConverterJSON()
        logger->critical("Can't find config path | Can't validate .json format in config file."); 
        throw std::runtime_error("Unable to read configuration file.");
     }
-    */
 }
 
 bool ConverterJSON::validateConfig()
@@ -168,7 +164,7 @@ bool ConverterJSON::readRequests()
 
     if(!j["requests"].empty())
     {
-        for(auto& words : requests)
+        for(auto& words : j["requests"])
             this->requests.push_back(words);
     }
     else
@@ -203,7 +199,30 @@ std::string CreateRequestId(int i)
     return oss.str();
 }
 
-void ConverterJSON::PutAnswers(std::vector<std::vector<std::pair<int, float>>> answers)
+void ConverterJSON::PutAnswers(std::vector<std::vector<RelativeIndex>> answers)
 {
-    //TODO: 
+    nlohmann::ordered_json j;
+
+    auto answers_size = answers.size();
+    for(int i = 0; i < answers_size; i++)
+    {
+        std::string requestId = CreateRequestId(i);
+        if(answers[i].size() > 0)
+        {
+            j["answers"][requestId]["result"] = true;
+            nlohmann::ordered_json d;
+            for(const auto & ans : answers[i])
+            {
+                d["docid"] = ans.doc_id;
+                d["rank"] = ans.rank;
+                j["answers"][requestId]["relevance"].push_back(d);
+            }
+        }
+        else
+            j["answers"][requestId]["result"] = false;
+    }
+
+    std::ofstream ofile(this->answers_file_name);
+
+    ofile << std::setw(4) << j << std::endl;
 }

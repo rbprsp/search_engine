@@ -24,7 +24,7 @@ private:
 
 public:
     SearchServer(InvertedIndex& idx) : _index(idx) {};
-    std::vector<std::vector<RelativeIndex>> search(const std::vector<std::string>& queries_input);
+    std::vector<std::vector<RelativeIndex>> search(const std::vector<std::string> &queries_input);
 
     void setMaxResponses(int max_responses);
 };

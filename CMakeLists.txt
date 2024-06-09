@@ -37,6 +37,7 @@ add_executable(${PROJECT_NAME}
         src/main.cpp
         src/converter/converter.cpp
         src/inverted/inverted.cpp
+        src/relative/relative.cpp
 )
 
 add_subdirectory("${CMAKE_CURRENT_LIST_DIR}/deps/googletest")

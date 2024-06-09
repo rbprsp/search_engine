@@ -16,7 +16,7 @@ void SearchServer::setMaxResponses(int max_responses)
         this->_max_responses = max_responses;
 }
 
-std::vector<std::vector<RelativeIndex>> SearchServer::search(const std::vector<std::string>& queries_input) 
+std::vector<std::vector<RelativeIndex>> SearchServer::search(const std::vector<std::string> &queries_input) 
 {
     std::vector<std::vector<RelativeIndex>> results;
 
