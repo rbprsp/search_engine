@@ -39,7 +39,7 @@ cmake --build build --config Release
 
 ### Using
 
-1. Create config file with name `config.json`
+1. Create config file with name `config.json` and requests file with name `requests.json`
 2. Add this lines to the config.json:
     ```json
     {
@@ -54,6 +54,15 @@ cmake --build build --config Release
             "your",
             "files",
             "here"
+        ]
+    }
+    ```
+
+    and add this to the requests.json:
+    ```json
+    {
+        "requests": [
+            "request here"
         ]
     }
     ```

@@ -20,6 +20,18 @@ void ConverterJSON::GenerateConfig()
     j["files"].push_back("your files here");
 
     file << std::setw(4) << j;
+
+    file.close();
+    j.clear();
+
+    file.open(this->requests_file_name);
+
+    j["requests"].push_back("request here");
+
+    file << std::setw(4) << j;
+
+    file.close();
+    
 }
 
 bool ConverterJSON::ValidateConfig()
