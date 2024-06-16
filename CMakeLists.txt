@@ -1,6 +1,6 @@
-cmake_minimum_required(VERSION 3.5)
+cmake_minimum_required(VERSION 3.20)
 
-cmake_path(GET CMAKE_CURRENT_SOURCE_DIR FILENAME PROJECT_NAME)
+cmake_path(GET CMAKE_CURRENT_SOURCE_DIR FILENAME PROJECT_NAME) #cmake_path(GET ...) was introdused in CMake 3.20
 string(REPLACE " " "_" PROJECT_ID ${PROJECT_NAME})
 
 ### ----------------
@@ -19,15 +19,15 @@ project(${PROJECT_NAME}
 )
 
 #external
-include_directories("${CMAKE_CURRENT_LIST_DIR}/deps/json/single_include/nlohmann")
-include_directories("${CMAKE_CURRENT_LIST_DIR}/deps/spdlog/include")
-include_directories("${CMAKE_CURRENT_LIST_DIR}/deps/googletest/include")
+include_directories("deps/json/single_include/nlohmann")
+include_directories("deps/spdlog/include")
+include_directories("deps/googletest/include")
 
 #local
-include_directories("${CMAKE_CURRENT_LIST_DIR}/src/logger")
-include_directories("${CMAKE_CURRENT_LIST_DIR}/src/converter")
-include_directories("${CMAKE_CURRENT_LIST_DIR}/src/inverted")
-include_directories("${CMAKE_CURRENT_LIST_DIR}/src/relative")
+include_directories("src/logger")
+include_directories("src/converter")
+include_directories("src/inverted")
+include_directories("src/relative")
 
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/bin)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/bin)
@@ -40,8 +40,8 @@ add_executable(${PROJECT_NAME}
         src/relative/relative.cpp
 )
 
-add_subdirectory("${CMAKE_CURRENT_LIST_DIR}/deps/googletest")
-add_subdirectory("${CMAKE_CURRENT_LIST_DIR}/deps/spdlog")
+add_subdirectory("deps/googletest")
+add_subdirectory("deps/spdlog")
 
 
 target_link_libraries(${PROJECT_NAME}
