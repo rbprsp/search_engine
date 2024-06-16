@@ -25,12 +25,17 @@ git clone --recursive https://github.com/szmxnv/search_engine
 cd search_engine
 ```
 
-3. Create project files in project root directory using `cmake`
+3. Ensure you have CMake version 3.20 or higher installed.
+```bash
+cmake --version
+```
+
+4. Create project files in project root directory using `cmake`
 ```bash
 cmake -B build
 ```
 
-4. Compile:
+5. Compile:
 ```bash
 cmake --build build --config Release
 ```
