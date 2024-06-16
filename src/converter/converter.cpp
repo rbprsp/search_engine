@@ -37,7 +37,7 @@ void ConverterJSON::GenerateConfig()
 bool ConverterJSON::ValidateConfig()
 {
 
-    this->file_sink = std::make_shared<spdlog::sinks::basic_file_sink_mt>("logs/logs.txt", true);
+    this->file_sink = std::make_shared<spdlog::sinks::basic_file_sink_mt>(this->log_file_name, true);
     this->logger = std::make_shared<spdlog::logger>("ConverterJSON", this->file_sink);
 
     spdlog::set_default_logger(this->logger);

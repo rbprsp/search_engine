@@ -22,8 +22,8 @@ int main(int argc, char* argv[])
 
     if(!cj.ValidateConfig())
     {
-        std::cout << "ERROR: check logs folder. \"logs/logs.txt\"" << std::endl;
-        return false;
+        std::cout << "ERROR: check logs folder. \""<< ConverterJSON::log_file_name << "\"" << std::endl;
+        return 1;
     }
 
     InvertedIndex ii;

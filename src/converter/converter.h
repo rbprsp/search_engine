@@ -52,6 +52,8 @@ public:
     void GenerateConfig();
 
     bool ValidateConfig();
+
+    static inline const std::string log_file_name = "logs/logs.txt";
 };
 
 #endif
